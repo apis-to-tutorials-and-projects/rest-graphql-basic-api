@@ -12,8 +12,18 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(cors({ allowedOrigins: [`http://localhost:${port}`] })); // Configura CORS
+app.use(cors()); // Configura CORS
 
+// Configurar el endpoint REST
+app.get('/', (req, res) => {
+    const baseUrl = req.get('host');
+    const protocol = req.protocol;
+    const endpoints = {
+      data: `${protocol}://${baseUrl}/data`,
+      graphql: `${protocol}://${baseUrl}/graphql`,
+    };
+    res.json(endpoints);
+  });
 
 // Configurar el endpoint GraphQL
 app.use(
